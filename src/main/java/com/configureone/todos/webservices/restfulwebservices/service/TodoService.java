@@ -11,7 +11,7 @@ import java.util.List;
 public class TodoService {
 
   private static List<Todo> todos = new ArrayList<>();
-  private static int todoCounter = 0;
+  private static int todoCounter = 1;
 
   static {
     todos.add(new Todo(todoCounter++, "in28minutes", "Learn to Dance 2", new Date(), false));
@@ -32,6 +32,17 @@ public class TodoService {
       found = todo;
     }
     return found;
+  }
+
+  public Todo saveTodo(Todo todo) {
+    if (todo.getId() == -1 || todo.getId() == 0) {
+      todo.setId(todoCounter++);
+      todos.add(todo);
+    } else {
+      deleteById(todo.getId());
+      todos.add(todo);
+    }
+    return todo;
   }
 
   public Todo findById(long id) {
