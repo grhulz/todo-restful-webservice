@@ -1,6 +1,6 @@
 package com.configureone.todos.webservices.restfulwebservices.controller;
 
-import com.configureone.todos.webservices.restfulwebservices.HelloWorldBean;
+import com.configureone.todos.webservices.restfulwebservices.model.HelloWorldBean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

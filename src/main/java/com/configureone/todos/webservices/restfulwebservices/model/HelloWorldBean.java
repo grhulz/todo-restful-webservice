@@ -1,4 +1,4 @@
-package com.configureone.todos.webservices.restfulwebservices;
+package com.configureone.todos.webservices.restfulwebservices.model;
 
 public class HelloWorldBean {
 
