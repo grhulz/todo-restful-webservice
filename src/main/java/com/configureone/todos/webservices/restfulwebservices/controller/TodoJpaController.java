@@ -1,6 +1,7 @@
 package com.configureone.todos.webservices.restfulwebservices.controller;
 
 import com.configureone.todos.webservices.restfulwebservices.model.Todo;
+import com.configureone.todos.webservices.restfulwebservices.model.TodoJpaRepository;
 import com.configureone.todos.webservices.restfulwebservices.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,40 +14,41 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-public class TodoController {
+public class TodoJpaController {
 
   @Autowired private TodoService todoService;
 
-  @GetMapping("/users/{userName}/todos")
+  @Autowired
+  private TodoJpaRepository todoJpaRepository;
+
+  @GetMapping("/jpa/users/{userName}/todos")
   public List<Todo> getAllTodos(@PathVariable String userName) {
-    return todoService.findAll();
+    return todoJpaRepository.findByUsername(userName);
   }
 
-  @GetMapping("/users/{userName}/todos/{id}")
+  @GetMapping("/jpa/users/{userName}/todos/{id}")
   public Todo getTodo(@PathVariable String userName, @PathVariable Long id) {
-    return todoService.findById(id);
+    return todoJpaRepository.findById(id).get();
   }
 
-  @DeleteMapping("/users/{userName}/todos/{id}")
+  @DeleteMapping("/jpa/users/{userName}/todos/{id}")
   public ResponseEntity<Void> deleteTodo(@PathVariable String userName, @PathVariable Long id) {
-    ResponseEntity responseEntity = ResponseEntity.notFound().build();
-    Todo todo = todoService.deleteById(id);
-    if (null != todo) {
-      responseEntity = ResponseEntity.noContent().build();
-    }
-    return responseEntity;
+    todoJpaRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/users/{userName}/todos/{id}")
+  @PutMapping("/jpa/users/{userName}/todos/{id}")
   public ResponseEntity<Todo> updateTodo(
       @PathVariable String userName, @PathVariable Long id, @RequestBody Todo todo) {
-    Todo updatedTodo = todoService.saveTodo(todo);
+    todo.setUsername(userName);
+    Todo updatedTodo = todoJpaRepository.save(todo);
     return new ResponseEntity<Todo>(updatedTodo, HttpStatus.OK);
   }
 
-  @PostMapping("/users/{userName}/todos")
-  public ResponseEntity<Void> saveTodo(@PathVariable String userName, @RequestBody Todo todo) {
-    Todo createdTodo = todoService.saveTodo(todo);
+  @PostMapping("/jpa/users/{userName}/todos")
+  public ResponseEntity<Void> createTodo(@PathVariable String userName, @RequestBody Todo todo) {
+    todo.setUsername(userName);
+    Todo createdTodo = todoJpaRepository.save(todo);
 
     URI uri =
         ServletUriComponentsBuilder.fromCurrentRequest()

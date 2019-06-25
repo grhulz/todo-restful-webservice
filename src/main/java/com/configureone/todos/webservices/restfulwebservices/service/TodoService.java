@@ -11,7 +11,7 @@ import java.util.List;
 public class TodoService {
 
   private static List<Todo> todos = new ArrayList<>();
-  private static int todoCounter = 1;
+  private static long todoCounter = 1;
 
   static {
     todos.add(new Todo(todoCounter++, "in28minutes", "Learn to Dance 2", new Date(), false));
